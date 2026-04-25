@@ -33,7 +33,15 @@
 }
 
 html {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
   scroll-behavior: smooth;
+}
+
+#root {
+  width: 100%;
+  max-width: 100%;
 }
 
 #top,
@@ -47,6 +55,8 @@ html {
 }
 
 body {
+  width: 100%;
+  max-width: 100%;
   min-width: 320px;
   min-height: 100vh;
   margin: 0;
@@ -89,7 +99,10 @@ img {
 
 .landing-shell {
   position: relative;
+  width: 100%;
+  max-width: 100%;
   min-height: 100vh;
+  overflow-x: clip;
 }
 
 .scroll-progress {
@@ -182,12 +195,13 @@ img {
 .site-nav::after {
   content: "";
   position: absolute;
-  left: 0;
-  right: 0;
+  left: 16px;
+  right: 16px;
   bottom: -1px;
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(233, 79, 139, 0.38), transparent);
-  transform: translateX(-40%);
+  transform: scaleX(0.24);
+  transform-origin: left center;
   animation: nav-line 7s ease-in-out infinite;
 }
 
@@ -370,7 +384,7 @@ img {
 
 .hero-title em {
   position: relative;
-  overflow: visible;
+  overflow: hidden;
   width: fit-content;
   max-width: 100%;
   margin: -2px 0 46px;
@@ -736,7 +750,8 @@ img {
   border-radius: inherit;
   pointer-events: none;
   background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.13) 45%, transparent 58%);
-  transform: translateX(-120%);
+  background-size: 220% 100%;
+  background-position: -160% 0;
   animation: card-sweep 7.2s ease-in-out infinite;
 }
 
@@ -1832,12 +1847,12 @@ img {
 @keyframes nav-line {
   0%,
   55% {
-    transform: translateX(-42%);
+    transform: scaleX(0.18);
     opacity: 0.24;
   }
 
   100% {
-    transform: translateX(42%);
+    transform: scaleX(1);
     opacity: 0.7;
   }
 }
@@ -1902,11 +1917,13 @@ img {
 @keyframes card-sweep {
   0%,
   58% {
-    transform: translateX(-120%);
+    background-position: -160% 0;
+    opacity: 0.7;
   }
 
   100% {
-    transform: translateX(120%);
+    background-position: 180% 0;
+    opacity: 1;
   }
 }
 
