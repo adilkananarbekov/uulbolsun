@@ -91,6 +91,7 @@ const formats = [
   {
     title: "Стандарт",
     price: "28 000 сом",
+    focus: "4 эфир · 6 модуль · 3 күн практика",
     text: "1 ай, 4 жандуу эфир, 6 модуль, 3 күн офлайн практика жана куратордон кайтарым байланыш.",
     meta: "60 000 → 28 000 сом",
     tone: "dark",
@@ -98,6 +99,7 @@ const formats = [
   {
     title: "VIP",
     price: "50 000 сом",
+    focus: "10 модуль · 5 күн практика · бонус",
     text: "1,5 ай, жумасына 3 эфир, 10 модуль, 5 күн офлайн практика жана бонус сабактар.",
     meta: "90 000 → 50 000 сом",
     tone: "light",
@@ -105,6 +107,7 @@ const formats = [
   {
     title: "Курстан кийин",
     price: "онлайн",
+    focus: "30 000ден 150 000+ киреше",
     text: "Продюсер, контентмейкер, сторисмейкер, SMM-адис, копирайтер, прогрев жана сатуу менеджер.",
     meta: "30 000ден 150 000+",
     tone: "accent",
@@ -112,6 +115,7 @@ const formats = [
   {
     title: "Спикерлер",
     price: "практика",
+    focus: "сатуу + психология",
     text: "Майрам Мухамбетова — сатуу наставник. Рахима Сабаева — психолог.",
     meta: "сатуу + психология",
     tone: "light",
@@ -402,7 +406,7 @@ export default function App() {
             </div>
             <p className="hero-date" data-intro>
               <CalendarDays size={14} />
-              старт {courseStartDate}
+              старт <strong>{courseStartDate}</strong>
             </p>
 
             <h1 className="hero-title" data-intro>
@@ -559,12 +563,16 @@ export default function App() {
           {formats.map((item) => (
             <article className={`format-card ${item.tone}`} key={item.title}>
               <header>
-                <span>{item.title}</span>
+                <span className="format-title">{item.title}</span>
                 <b className="price-pill">{item.price}</b>
               </header>
-              <p>{item.text}</p>
+              <span className="format-focus">
+                <CircleDot size={11} fill="currentColor" />
+                {item.focus}
+              </span>
+              <p className="format-copy">{item.text}</p>
               <footer>
-                <span>{item.meta}</span>
+                <span className="format-meta">{item.meta}</span>
                 <ArrowRight size={18} />
               </footer>
             </article>
@@ -596,9 +604,9 @@ export default function App() {
             Эфирден баштап, курска орун брондоңуз. Менеджер программа, практика
             жана төлөм шарттарын түшүндүрөт.
           </p>
-          <small>
+          <small className="cta-facts">
             <CircleDot size={11} fill="currentColor" />
-            эфир · курс · практика · старт {courseStartDate}
+            эфир · курс · практика · <strong>старт {courseStartDate}</strong>
           </small>
         </div>
         <form className="signup-form" onSubmit={handleLeadSubmit}>
