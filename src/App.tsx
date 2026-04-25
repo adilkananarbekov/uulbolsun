@@ -246,6 +246,7 @@ export default function App() {
   const [leadLevel, setLeadLevel] = useState<LeadLevel>("zero");
   const [leadStatus, setLeadStatus] = useState<LeadStatus>("idle");
   const [leadMessage, setLeadMessage] = useState("Маалымат калтырсаңыз, менеджер байланышат.");
+  const [showMobileCta, setShowMobileCta] = useState(false);
   const prefersReducedMotion = usePrefersReducedMotion();
   useMotionSetup();
   useRevealMotion();
@@ -266,6 +267,24 @@ export default function App() {
       window.removeEventListener("hashchange", closeOnHashChange);
     };
   }, [menuOpen]);
+
+  useEffect(() => {
+    const updateMobileCta = () => {
+      const signup = document.getElementById("signup");
+      const signupTop = signup?.getBoundingClientRect().top ?? Number.POSITIVE_INFINITY;
+      const signupInView = signupTop < window.innerHeight * 0.78;
+
+      setShowMobileCta(window.scrollY > 420 && !signupInView);
+    };
+
+    updateMobileCta();
+    window.addEventListener("scroll", updateMobileCta, { passive: true });
+    window.addEventListener("resize", updateMobileCta);
+    return () => {
+      window.removeEventListener("scroll", updateMobileCta);
+      window.removeEventListener("resize", updateMobileCta);
+    };
+  }, []);
 
   async function handleLeadSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -358,6 +377,15 @@ export default function App() {
           <ArrowRight size={16} />
         </a>
       </header>
+
+      <a
+        className={showMobileCta ? "mobile-sticky-cta visible" : "mobile-sticky-cta"}
+        href="#signup"
+        aria-label="Эфирге катталуу"
+      >
+        <span>Эфирге катталуу</span>
+        <ArrowRight size={16} />
+      </a>
 
       <section className="hero-section" id="top">
         <div className="hero-meta" data-intro>
