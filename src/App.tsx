@@ -660,21 +660,35 @@ export default function App() {
       </section>
 
       <footer className="site-footer">
-        <a className="brand" href="#top">
-          <span className="brand-dot" />
-          <span>МЕН ПРОДЮСЕР</span>
-        </a>
-        <nav aria-label="Footer navigation">
+        <div className="footer-main">
+          <a className="footer-brand" href="#top" aria-label="МЕН ПРОДЮСЕР башкы бет">
+            <span className="brand-dot" />
+            <strong>МЕН ПРОДЮСЕР</strong>
+          </a>
+          <p>
+            Уулболсун Алмазбектин автордук курсу: эксперт менен запуск,
+            контент, сатуу жана практика бир системада.
+          </p>
+        </div>
+
+        <nav className="footer-links" aria-label="Footer navigation">
           <a href="#program">Программа</a>
-          <a href="#mentor">Автор</a>
-          <a href="#video">Видео</a>
           <a href="#formats">Тарифтер</a>
+          <a href="#mentor">Автор</a>
+          <a href="#signup">Катталуу</a>
         </nav>
-        <div className="socials">
-          <a href="#top">TG</a>
-          <a href="#top">VK</a>
-          <a href="#top">YT</a>
-          <a href="#top">IG</a>
+
+        <div className="footer-action">
+          <span>{courseStartDate}</span>
+          <a href="#signup">
+            Орун брондоо
+            <ArrowRight size={16} />
+          </a>
+        </div>
+
+        <div className="footer-bottom">
+          <span>© 2026 МЕН ПРОДЮСЕР</span>
+          <a href="#top">Башына кайтуу</a>
         </div>
       </footer>
     </main>
