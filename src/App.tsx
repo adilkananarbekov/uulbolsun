@@ -430,7 +430,7 @@ export default function App() {
                 <article key={item.value}>
                   <CheckCircle2 size={18} />
                   <div>
-                    <strong>{item.value}</strong>
+                    <strong className="proof-value">{item.value}</strong>
                     <span>{item.label}</span>
                   </div>
                 </article>
@@ -560,7 +560,7 @@ export default function App() {
             <article className={`format-card ${item.tone}`} key={item.title}>
               <header>
                 <span>{item.title}</span>
-                <b>{item.price}</b>
+                <b className="price-pill">{item.price}</b>
               </header>
               <p>{item.text}</p>
               <footer>
@@ -707,7 +707,7 @@ export default function App() {
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <article>
-      <strong>{value}</strong>
+      <strong className="metric-value">{value}</strong>
       <span>{label}</span>
     </article>
   );
