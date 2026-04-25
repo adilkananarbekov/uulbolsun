@@ -20,7 +20,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      VITE_BASE_PATH: /${{ github.event.repository.name }}/
+      VITE_BASE_PATH: /uulbolsun/
       VITE_SUPABASE_URL: https://kwnliopkbeotibzkrbki.supabase.co
       VITE_SUPABASE_PUBLISHABLE_KEY: sb_publishable_Z4MZHhL0xbpSu_ckH_e2Tg_47cSRU5v
     steps:

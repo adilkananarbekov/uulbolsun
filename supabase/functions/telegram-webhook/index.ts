@@ -29,7 +29,7 @@ type TelegramUpdate = {
 };
 
 const allowedUsernames = new Set(
-  (Deno.env.get("TELEGRAM_ALLOWED_USERNAMES") ?? "Choke2745,Adilkan_dev")
+  (Deno.env.get("TELEGRAM_ALLOWED_USERNAMES") ?? "Adilkan_07,Choke2745,Adilkan_dev")
     .split(",")
     .map((item) => item.trim().replace(/^@/, "").toLowerCase())
     .filter(Boolean),
