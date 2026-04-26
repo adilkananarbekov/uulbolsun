@@ -3,7 +3,6 @@ import {
   ArrowRight,
   BadgeCheck,
   BarChart3,
-  Camera,
   CalendarDays,
   CircleDot,
   ClipboardCheck,
@@ -162,12 +161,12 @@ const levelOptions = [
 const lenisOptions = {
   autoRaf: true,
   gestureOrientation: "vertical",
-  lerp: 0.085,
+  lerp: 0.075,
   smoothWheel: true,
   stopInertiaOnNavigate: true,
   syncTouch: false,
   touchMultiplier: 1,
-  wheelMultiplier: 0.9,
+  wheelMultiplier: 0.82,
 } as const;
 
 type MotionTone = "accent" | "signal" | "sun" | "deep";
@@ -187,12 +186,14 @@ function useRevealMotion() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            observer.unobserve(entry.target);
+            window.requestAnimationFrame(() => {
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            });
           }
         });
       },
-      { rootMargin: "0px 0px -12% 0px", threshold: 0.18 },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.04 },
     );
 
     elements.forEach((element) => observer.observe(element));
@@ -233,6 +234,8 @@ function usePrefersReducedMotion() {
 
 function useScrollProgress() {
   useEffect(() => {
+    let frame = 0;
+
     const updateProgress = () => {
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
       const progress = maxScroll > 0 ? window.scrollY / maxScroll : 0;
@@ -240,12 +243,21 @@ function useScrollProgress() {
       document.documentElement.style.setProperty("--scroll-progress", progress.toFixed(4));
     };
 
+    const scheduleProgress = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        updateProgress();
+      });
+    };
+
     updateProgress();
-    window.addEventListener("scroll", updateProgress, { passive: true });
-    window.addEventListener("resize", updateProgress);
+    window.addEventListener("scroll", scheduleProgress, { passive: true });
+    window.addEventListener("resize", scheduleProgress);
     return () => {
-      window.removeEventListener("scroll", updateProgress);
-      window.removeEventListener("resize", updateProgress);
+      if (frame) window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", scheduleProgress);
+      window.removeEventListener("resize", scheduleProgress);
       document.documentElement.style.removeProperty("--scroll-progress");
     };
   }, []);
@@ -268,11 +280,14 @@ function LenisHashScroll() {
         const offset = window.innerWidth <= 860 ? 76 : 78;
         const top = Math.max(0, element.getBoundingClientRect().top + window.scrollY - offset);
 
-        window.scrollTo(0, top);
-        lenis.scrollTo(top, { immediate: true });
+        lenis.scrollTo(top, {
+          duration: 0.75,
+          easing: (t: number) => Math.min(1, 1.001 - 2 ** (-10 * t)),
+        });
       };
 
-      [80, 520, 1100].forEach((delay) => window.setTimeout(scrollOnce, delay));
+      window.requestAnimationFrame(scrollOnce);
+      window.setTimeout(scrollOnce, 420);
     };
 
     scrollToHash();
@@ -715,7 +730,7 @@ export default function App() {
           </p>
           <div className="contact-actions" aria-label="Тез байланыш">
             <a href={instagramUrl} target="_blank" rel="noreferrer">
-              <Camera size={16} />
+              <InstagramLogo size={16} />
               Instagram
             </a>
             <a href={whatsappUrl} target="_blank" rel="noreferrer">
@@ -739,7 +754,7 @@ export default function App() {
         </nav>
         <div className="socials" aria-label="Социалдык байланыштар">
           <a className="social-link instagram" href={instagramUrl} target="_blank" rel="noreferrer">
-            <Camera size={15} />
+            <InstagramLogo size={15} />
             Instagram
           </a>
           <a className="social-link whatsapp" href={whatsappUrl} target="_blank" rel="noreferrer">
@@ -819,6 +834,23 @@ function CourseCard({ compact = false }: { compact?: boolean }) {
         практика · запуск · сатуу
       </div>
     </article>
+  );
+}
+
+function InstagramLogo({ size = 16 }: { size?: number }) {
+  return (
+    <svg
+      aria-hidden="true"
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect x="4" y="4" width="16" height="16" rx="5" stroke="currentColor" strokeWidth="2" />
+      <circle cx="12" cy="12" r="3.4" stroke="currentColor" strokeWidth="2" />
+      <circle cx="17" cy="7" r="1.2" fill="currentColor" />
+    </svg>
   );
 }
 
