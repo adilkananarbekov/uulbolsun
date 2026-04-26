@@ -11,7 +11,6 @@ import {
 } from "lucide-react";
 import { ReactLenis, useLenis } from "lenis/react";
 import { useEffect, useLayoutEffect, useState, type FormEvent } from "react";
-import mentorImage from "./assets/uulbolsun-almazbek.png";
 import { isSupabaseConfigured, supabase } from "./lib/supabase";
 
 const marqueeItems = [
@@ -79,7 +78,7 @@ const proofPoints = [
   },
   {
     value: "3 күн",
-    label: "офлайн практика",
+    label: "онлайн практика",
   },
   {
     value: "куратор",
@@ -91,34 +90,23 @@ const formats = [
   {
     title: "Стандарт",
     price: "28 000 сом",
-    focus: "4 эфир · 6 модуль · 3 күн практика",
-    text: "1 ай, 4 жандуу эфир, 6 модуль, 3 күн офлайн практика жана куратордон кайтарым байланыш.",
+    text: "1 ай, 4 жандуу эфир, 6 модуль, 3 күн онлайн практика жана куратордон кайтарым байланыш.",
     meta: "60 000 → 28 000 сом",
     tone: "dark",
   },
   {
     title: "VIP",
     price: "50 000 сом",
-    focus: "10 модуль · 5 күн практика · бонус",
-    text: "1,5 ай, жумасына 3 эфир, 10 модуль, 5 күн офлайн практика жана бонус сабактар.",
+    text: "1,5 ай, жумасына 3 эфир, 10 модуль, 5 күн онлайн практика жана бонус сабактар.",
     meta: "90 000 → 50 000 сом",
     tone: "light",
   },
   {
     title: "Курстан кийин",
     price: "онлайн",
-    focus: "30 000ден 150 000+ киреше",
     text: "Продюсер, контентмейкер, сторисмейкер, SMM-адис, копирайтер, прогрев жана сатуу менеджер.",
     meta: "30 000ден 150 000+",
     tone: "accent",
-  },
-  {
-    title: "Спикерлер",
-    price: "практика",
-    focus: "сатуу + психология",
-    text: "Майрам Мухамбетова — сатуу наставник. Рахима Сабаева — психолог.",
-    meta: "сатуу + психология",
-    tone: "light",
   },
 ];
 
@@ -129,7 +117,6 @@ const levelOptions = [
 ] as const;
 
 const lenisOptions = {
-  anchors: { offset: 86 },
   autoRaf: true,
   gestureOrientation: "vertical",
   lerp: 0.085,
@@ -230,9 +217,18 @@ function LenisHashScroll() {
       const target = window.location.hash;
       if (!target) return;
 
-      window.setTimeout(() => {
-        lenis.scrollTo(target, { offset: 86 });
-      }, 80);
+      const scrollOnce = () => {
+        const element = document.querySelector<HTMLElement>(target);
+        if (!element) return;
+
+        const offset = window.innerWidth <= 860 ? 76 : 78;
+        const top = Math.max(0, element.getBoundingClientRect().top + window.scrollY - offset);
+
+        window.scrollTo(0, top);
+        lenis.scrollTo(top, { immediate: true });
+      };
+
+      [80, 520, 1100].forEach((delay) => window.setTimeout(scrollOnce, delay));
     };
 
     scrollToHash();
@@ -250,7 +246,6 @@ export default function App() {
   const [leadLevel, setLeadLevel] = useState<LeadLevel>("zero");
   const [leadStatus, setLeadStatus] = useState<LeadStatus>("idle");
   const [leadMessage, setLeadMessage] = useState("Маалымат калтырсаңыз, менеджер байланышат.");
-  const [showMobileCta, setShowMobileCta] = useState(false);
   const prefersReducedMotion = usePrefersReducedMotion();
   useMotionSetup();
   useRevealMotion();
@@ -271,24 +266,6 @@ export default function App() {
       window.removeEventListener("hashchange", closeOnHashChange);
     };
   }, [menuOpen]);
-
-  useEffect(() => {
-    const updateMobileCta = () => {
-      const signup = document.getElementById("signup");
-      const signupTop = signup?.getBoundingClientRect().top ?? Number.POSITIVE_INFINITY;
-      const signupInView = signupTop < window.innerHeight * 0.78;
-
-      setShowMobileCta(window.scrollY > 420 && !signupInView);
-    };
-
-    updateMobileCta();
-    window.addEventListener("scroll", updateMobileCta, { passive: true });
-    window.addEventListener("resize", updateMobileCta);
-    return () => {
-      window.removeEventListener("scroll", updateMobileCta);
-      window.removeEventListener("resize", updateMobileCta);
-    };
-  }, []);
 
   async function handleLeadSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -382,20 +359,11 @@ export default function App() {
         </a>
       </header>
 
-      <a
-        className={showMobileCta ? "mobile-sticky-cta visible" : "mobile-sticky-cta"}
-        href="#signup"
-        aria-label="Эфирге катталуу"
-      >
-        <span>Эфирге катталуу</span>
-        <ArrowRight size={16} />
-      </a>
-
       <section className="hero-section" id="top">
         <div className="hero-meta" data-intro>
           <span>МЕН ПРОДЮСЕР · автордук курс</span>
-          <span>Уулболсун Алмазбек · 3,5 жылдык опыт</span>
-          <span>{courseStartDate} · онлайн + офлайн практика</span>
+          <span>Уулболсун Алмазбек · 3,5 жылдык тажрыйбасы бар</span>
+          <span>{courseStartDate} · онлайн практика</span>
         </div>
 
         <div className="hero-grid">
@@ -406,7 +374,7 @@ export default function App() {
             </div>
             <p className="hero-date" data-intro>
               <CalendarDays size={14} />
-              старт <strong>{courseStartDate}</strong>
+              старт {courseStartDate}
             </p>
 
             <h1 className="hero-title" data-intro>
@@ -419,6 +387,19 @@ export default function App() {
               Уулболсун Алмазбектин автордук курсу: 0дон баштап онлайн продюсер
               болуп, эксперттер менен запуск жасап, киреше табууну үйрөнөсүз.
             </p>
+
+            <div className="hero-actions" data-intro>
+              <a className="primary-action" href="#signup">
+                Катталуу
+                <span>
+                  <ArrowRight size={17} />
+                </span>
+              </a>
+              <a className="secondary-action" href="#program">
+                Программаны көрүү
+                <ArrowDown size={16} />
+              </a>
+            </div>
 
             <div className="hero-benefits" data-intro>
               {heroBenefits.map((item) => (
@@ -434,24 +415,11 @@ export default function App() {
                 <article key={item.value}>
                   <CheckCircle2 size={18} />
                   <div>
-                    <strong className="proof-value">{item.value}</strong>
+                    <strong>{item.value}</strong>
                     <span>{item.label}</span>
                   </div>
                 </article>
               ))}
-            </div>
-
-            <div className="hero-actions" data-intro>
-              <a className="primary-action" href="#signup">
-                Катталуу
-                <span>
-                  <ArrowRight size={17} />
-                </span>
-              </a>
-              <a className="secondary-action" href="#program">
-                Программаны көрүү
-                <ArrowDown size={16} />
-              </a>
             </div>
 
           </div>
@@ -461,7 +429,7 @@ export default function App() {
           </div>
 
           <div className="hero-stats" data-intro>
-            <Stat value="3,5" label="жылдык опыт" />
+            <Stat value="3,5" label="жылдык тажрыйба" />
             <Stat value="25 млн" label="сомго чейин сатуу" />
             <Stat value="150K+" label="киреше потенциалы" />
           </div>
@@ -497,7 +465,7 @@ export default function App() {
           </article>
           <article className="audience-card dark-card">
             <span>натыйжа</span>
-            <strong>Эфирден биринчи запускка чейин</strong>
+            <strong>0дон биринчи запуск СИСТЕМАСЫ</strong>
             <p>
               Контентти, прогревди, сатуу сценарийин жана команда менен иштөөнү
               бир логикага чогултасыз.
@@ -528,15 +496,11 @@ export default function App() {
       </section>
 
       <section className="mentor-section section-pad" id="mentor" data-reveal>
-        <div className="mentor-card">
-          <CourseCard compact />
-        </div>
         <div className="mentor-copy">
           <span className="section-label">/ 04 — кимден үйрөнөсүз</span>
           <h2>Уулболсун Алмазбек</h2>
           <p>
-            Уулболсун Алмазбек — 3,5 жылдык опыты бар, 250 000 сомдон 25
-            миллион сомго чейин сатуу жасаган эксперттердин продюсери.
+            3,5 миллиондон 25 миллион сомго чейин сатуу жасаган эксперттердин продюсери.
           </p>
           <div className="mentor-stats">
             {mentorStats.map(([value, label]) => (
@@ -545,10 +509,6 @@ export default function App() {
                 <span>{label}</span>
               </article>
             ))}
-          </div>
-          <div className="speaker-strip">
-            <span>Спикерлер</span>
-            <p>Майрам Мухамбетова — сатуу наставник; Рахима Сабаева — психолог.</p>
           </div>
         </div>
       </section>
@@ -563,16 +523,12 @@ export default function App() {
           {formats.map((item) => (
             <article className={`format-card ${item.tone}`} key={item.title}>
               <header>
-                <span className="format-title">{item.title}</span>
-                <b className="price-pill">{item.price}</b>
+                <span>{item.title}</span>
+                <b>{item.price}</b>
               </header>
-              <span className="format-focus">
-                <CircleDot size={11} fill="currentColor" />
-                {item.focus}
-              </span>
-              <p className="format-copy">{item.text}</p>
+              <p>{item.text}</p>
               <footer>
-                <span className="format-meta">{item.meta}</span>
+                <span>{item.meta}</span>
                 <ArrowRight size={18} />
               </footer>
             </article>
@@ -596,17 +552,15 @@ export default function App() {
           <h2>
             Эфирге кошул
             <br />
-            курска старт ал
-            <br />
             орун брондо
           </h2>
           <p>
             Эфирден баштап, курска орун брондоңуз. Менеджер программа, практика
             жана төлөм шарттарын түшүндүрөт.
           </p>
-          <small className="cta-facts">
+          <small>
             <CircleDot size={11} fill="currentColor" />
-            эфир · курс · практика · <strong>старт {courseStartDate}</strong>
+            эфир · курс · практика · старт {courseStartDate}
           </small>
         </div>
         <form className="signup-form" onSubmit={handleLeadSubmit}>
@@ -668,35 +622,21 @@ export default function App() {
       </section>
 
       <footer className="site-footer">
-        <div className="footer-main">
-          <a className="footer-brand" href="#top" aria-label="МЕН ПРОДЮСЕР башкы бет">
-            <span className="brand-dot" />
-            <strong>МЕН ПРОДЮСЕР</strong>
-          </a>
-          <p>
-            Уулболсун Алмазбектин автордук курсу: эксперт менен запуск,
-            контент, сатуу жана практика бир системада.
-          </p>
-        </div>
-
-        <nav className="footer-links" aria-label="Footer navigation">
+        <a className="brand" href="#top">
+          <span className="brand-dot" />
+          <span>МЕН ПРОДЮСЕР</span>
+        </a>
+        <nav aria-label="Footer navigation">
           <a href="#program">Программа</a>
-          <a href="#formats">Тарифтер</a>
           <a href="#mentor">Автор</a>
-          <a href="#signup">Катталуу</a>
+          <a href="#video">Видео</a>
+          <a href="#formats">Тарифтер</a>
         </nav>
-
-        <div className="footer-action">
-          <span>{courseStartDate}</span>
-          <a href="#signup">
-            Орун брондоо
-            <ArrowRight size={16} />
-          </a>
-        </div>
-
-        <div className="footer-bottom">
-          <span>© 2026 МЕН ПРОДЮСЕР</span>
-          <a href="#top">Башына кайтуу</a>
+        <div className="socials">
+          <a href="#top">TG</a>
+          <a href="#top">VK</a>
+          <a href="#top">YT</a>
+          <a href="#top">IG</a>
         </div>
       </footer>
     </main>
@@ -715,7 +655,7 @@ export default function App() {
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <article>
-      <strong className="metric-value">{value}</strong>
+      <strong>{value}</strong>
       <span>{label}</span>
     </article>
   );
@@ -730,7 +670,14 @@ function CourseCard({ compact = false }: { compact?: boolean }) {
         <i />
       </header>
       <strong>продюсер</strong>
-      <img src={mentorImage} alt="Уулболсун Алмазбек" />
+      <div className="course-matrix" aria-hidden="true">
+        <span className="matrix-core">0дон</span>
+        <span>контент</span>
+        <span>прогрев</span>
+        <span>эфир</span>
+        <span>бронь</span>
+        <span>сатуу</span>
+      </div>
       <footer>
         <div>
           <span>Курс</span>
