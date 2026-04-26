@@ -360,6 +360,11 @@ export default function App() {
       </header>
 
       <section className="hero-section" id="top">
+        <div className="hero-orbit" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </div>
         <div className="hero-meta" data-intro>
           <span>МЕН ПРОДЮСЕР · автордук курс</span>
           <span>Уулболсун Алмазбек · 3,5 жылдык тажрыйбасы бар</span>
@@ -445,6 +450,11 @@ export default function App() {
       <Marquee />
 
       <section className="audience-section section-pad" id="audience" data-reveal>
+        <div className="section-signal audience-signal" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </div>
         <div className="section-label">/ 02 — кимдер үчүн</div>
         <div className="section-heading">
           <h2>Курс кимдер үчүн?</h2>
@@ -475,6 +485,12 @@ export default function App() {
       </section>
 
       <section className="program-section" id="program" data-reveal>
+        <div className="program-track" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+          <span />
+        </div>
         <div className="program-head">
           <span>/ 03 — программа</span>
           <h2>Курста эмне болот?</h2>
@@ -496,6 +512,11 @@ export default function App() {
       </section>
 
       <section className="mentor-section section-pad" id="mentor" data-reveal>
+        <div className="section-signal mentor-signal" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </div>
         <div className="mentor-copy">
           <span className="section-label">/ 04 — кимден үйрөнөсүз</span>
           <h2>Уулболсун Алмазбек</h2>
@@ -514,6 +535,11 @@ export default function App() {
       </section>
 
       <section className="formats-section section-pad" id="formats" data-reveal>
+        <div className="section-signal formats-signal" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </div>
         <div className="formats-head">
           <span className="section-label">/ 05 — формат жана натыйжа</span>
           <h2>Форматтар жана натыйжа</h2>
@@ -547,6 +573,11 @@ export default function App() {
       </section>
 
       <section className="final-cta" id="signup" data-reveal>
+        <div className="section-signal cta-signal" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </div>
         <div className="cta-copy">
           <span>/ 06 — акыркы кадам</span>
           <h2>
