@@ -1,17 +1,30 @@
 import {
   ArrowDown,
   ArrowRight,
+  BadgeCheck,
+  BarChart3,
+  Camera,
   CalendarDays,
-  CheckCircle2,
   CircleDot,
+  ClipboardCheck,
+  GraduationCap,
   Menu,
+  MessageCircle,
   Play,
+  Route,
   Sparkles,
+  Target,
+  TrendingUp,
   X,
+  type LucideIcon,
 } from "lucide-react";
 import { ReactLenis, useLenis } from "lenis/react";
 import { useEffect, useLayoutEffect, useState, type FormEvent } from "react";
+import authorHeroImage from "./assets/uulbolsun-author-hero.jpg";
 import { isSupabaseConfigured, supabase } from "./lib/supabase";
+
+const instagramUrl = "https://www.instagram.com/uulbolsun_almazbek/";
+const whatsappUrl = "https://wa.me/996506515525";
 
 const marqueeItems = [
   "продюсер",
@@ -36,36 +49,57 @@ const audience = [
 const program = [
   {
     id: "01",
+    icon: GraduationCap,
     title: "Профессия",
     text: "Продюсердин ролу, жоопкерчилиги жана эксперт менен иштөө логикасы.",
   },
   {
     id: "02",
+    icon: Target,
     title: "Эксперт табуу",
     text: "Ниша, оффер, позициялоо жана эксперт менен сүйлөшүү сценарийи.",
   },
   {
     id: "03",
+    icon: MessageCircle,
     title: "Контент",
     text: "Instagram, сторис, прогрев жана аудиторияны ишенимге алып келүү.",
   },
   {
     id: "04",
+    icon: TrendingUp,
     title: "Продажи",
     text: "Эфир, консультация, бронь жана төлөмгө жеткирүү системасы.",
   },
   {
     id: "05",
+    icon: Route,
     title: "Запуск",
     text: "Команда, дедлайн, аналитика жана биринчи акчалай натыйжа.",
   },
 ];
 
 const mentorStats = [
-  ["3,5 жыл", "продюсерлик жана Instagram запуск тажрыйбасы"],
-  ["25 млн сом", "сатуу натыйжасына чейин жеткирген система"],
-  ["наставник", "практика жана кайтарым байланыш менен иштейт"],
-  ["МЕН ПРОДЮСЕР", "онлайн киреше жана системдүү запуск"],
+  {
+    icon: BadgeCheck,
+    value: "3,5 жыл",
+    label: "продюсерлик жана Instagram запуск тажрыйбасы",
+  },
+  {
+    icon: BarChart3,
+    value: "25 млн сом",
+    label: "сатуу натыйжасына чейин жеткирген система",
+  },
+  {
+    icon: MessageCircle,
+    value: "наставник",
+    label: "практика жана кайтарым байланыш менен иштейт",
+  },
+  {
+    icon: Sparkles,
+    value: "МЕН ПРОДЮСЕР",
+    label: "онлайн киреше жана системдүү запуск",
+  },
 ];
 
 const heroBenefits = ["0дон баштоо", "эксперт менен запуск", "практика + сатуу"] as const;
@@ -73,21 +107,28 @@ const courseStartDate = "28-апрель 2026";
 
 const proofPoints = [
   {
+    icon: Route,
+    tone: "signal",
     value: "6 модуль",
     label: "запуск системасы",
   },
   {
+    icon: ClipboardCheck,
+    tone: "accent",
     value: "3 күн",
     label: "онлайн практика",
   },
   {
+    icon: MessageCircle,
+    tone: "sun",
     value: "куратор",
     label: "кайтарым байланыш",
   },
-] as const;
+] satisfies Array<{ icon: LucideIcon; tone: MotionTone; value: string; label: string }>;
 
 const formats = [
   {
+    icon: ClipboardCheck,
     title: "Стандарт",
     price: "28 000 сом",
     text: "1 ай, 4 жандуу эфир, 6 модуль, 3 күн онлайн практика жана куратордон кайтарым байланыш.",
@@ -95,6 +136,7 @@ const formats = [
     tone: "dark",
   },
   {
+    icon: BadgeCheck,
     title: "VIP",
     price: "50 000 сом",
     text: "1,5 ай, жумасына 3 эфир, 10 модуль, 5 күн онлайн практика жана бонус сабактар.",
@@ -102,6 +144,7 @@ const formats = [
     tone: "light",
   },
   {
+    icon: TrendingUp,
     title: "Курстан кийин",
     price: "онлайн",
     text: "Продюсер, контентмейкер, сторисмейкер, SMM-адис, копирайтер, прогрев жана сатуу менеджер.",
@@ -127,6 +170,7 @@ const lenisOptions = {
   wheelMultiplier: 0.9,
 } as const;
 
+type MotionTone = "accent" | "signal" | "sun" | "deep";
 type LeadLevel = (typeof levelOptions)[number]["value"];
 type LeadStatus = "idle" | "submitting" | "success" | "error";
 
@@ -388,6 +432,15 @@ export default function App() {
               <span className="wide-word">автордук курс</span>
             </h1>
 
+            <div className="hero-hook" data-intro>
+              <MotionIcon icon={TrendingUp} tone="accent" compact />
+              <span>3,5 миллиондон 25 миллион сомго чейин сатуу жасаган эксперттердин продюсери.</span>
+            </div>
+
+            <div className="mobile-hero-preview" data-intro>
+              <CourseCard compact />
+            </div>
+
             <p className="hero-text" data-intro>
               Уулболсун Алмазбектин автордук курсу: 0дон баштап онлайн продюсер
               болуп, эксперттер менен запуск жасап, киреше табууну үйрөнөсүз.
@@ -418,7 +471,7 @@ export default function App() {
             <div className="proof-strip" data-intro aria-label="Курстун негизги далилдери">
               {proofPoints.map((item) => (
                 <article key={item.value}>
-                  <CheckCircle2 size={18} />
+                  <MotionIcon icon={item.icon} tone={item.tone} compact />
                   <div>
                     <strong>{item.value}</strong>
                     <span>{item.label}</span>
@@ -457,6 +510,7 @@ export default function App() {
         </div>
         <div className="section-label">/ 02 — кимдер үчүн</div>
         <div className="section-heading">
+          <HookLine icon={Target}>Биринчи суроо: сиз азыр кайсы чекиттесиз?</HookLine>
           <h2>Курс кимдер үчүн?</h2>
           <p>
             Бул курс “эмнеден баштайм?”, “өзүмдү кантип сатам?” жана “кантип
@@ -493,6 +547,7 @@ export default function App() {
         </div>
         <div className="program-head">
           <span>/ 03 — программа</span>
+          <HookLine icon={Route}>5 кадам: эксперттен төлөмгө чейин бир запуск картасы.</HookLine>
           <h2>Курста эмне болот?</h2>
           <p>Теория аз, практика көп: ар бир блок запусктын реалдуу кадамына байланган.</p>
         </div>
@@ -500,6 +555,7 @@ export default function App() {
           {program.map((item) => (
             <article className="program-card" key={item.id}>
               <span>{item.id}</span>
+              <MotionIcon icon={item.icon} tone="accent" compact />
               <h3>{item.title}</h3>
               <p>{item.text}</p>
             </article>
@@ -519,15 +575,17 @@ export default function App() {
         </div>
         <div className="mentor-copy">
           <span className="section-label">/ 04 — кимден үйрөнөсүз</span>
+          <HookLine icon={BadgeCheck}>Сатуу цифрасы жана практика бир жерден көрүнүшү керек.</HookLine>
           <h2>Уулболсун Алмазбек</h2>
           <p>
             3,5 миллиондон 25 миллион сомго чейин сатуу жасаган эксперттердин продюсери.
           </p>
           <div className="mentor-stats">
-            {mentorStats.map(([value, label]) => (
-              <article key={value}>
-                <strong>{value}</strong>
-                <span>{label}</span>
+            {mentorStats.map((item) => (
+              <article key={item.value}>
+                <MotionIcon icon={item.icon} tone="accent" compact />
+                <strong>{item.value}</strong>
+                <span>{item.label}</span>
               </article>
             ))}
           </div>
@@ -542,6 +600,7 @@ export default function App() {
         </div>
         <div className="formats-head">
           <span className="section-label">/ 05 — формат жана натыйжа</span>
+          <HookLine icon={ClipboardCheck}>Кайсы формат сизге туура келет?</HookLine>
           <h2>Форматтар жана натыйжа</h2>
           <p>эфир → курс → практика → запуск</p>
         </div>
@@ -549,7 +608,10 @@ export default function App() {
           {formats.map((item) => (
             <article className={`format-card ${item.tone}`} key={item.title}>
               <header>
-                <span>{item.title}</span>
+                <span>
+                  <MotionIcon icon={item.icon} tone={item.tone === "dark" ? "accent" : "signal"} compact />
+                  {item.title}
+                </span>
                 <b>{item.price}</b>
               </header>
               <p>{item.text}</p>
@@ -561,6 +623,7 @@ export default function App() {
           ))}
           <article className="video-card" id="video">
             <span>Видео түшүндүрмө</span>
+            <HookLine icon={Play}>Көрүп түшүн: эфирден башта, анан форматты танда.</HookLine>
             <strong>КУРС ТУУРАЛУУ ВИДЕО ТҮШҮНДҮРМӨ</strong>
             <p>
               Эфирден башта, анан курс форматын танда.
@@ -580,6 +643,7 @@ export default function App() {
         </div>
         <div className="cta-copy">
           <span>/ 06 — акыркы кадам</span>
+          <HookLine icon={MessageCircle}>30 секунд: байланыш калтырып, орунду брондоңуз.</HookLine>
           <h2>
             Эфирге кошул
             <br />
@@ -649,6 +713,16 @@ export default function App() {
           >
             {leadMessage}
           </p>
+          <div className="contact-actions" aria-label="Тез байланыш">
+            <a href={instagramUrl} target="_blank" rel="noreferrer">
+              <Camera size={16} />
+              Instagram
+            </a>
+            <a href={whatsappUrl} target="_blank" rel="noreferrer">
+              <MessageCircle size={16} />
+              WhatsApp
+            </a>
+          </div>
         </form>
       </section>
 
@@ -663,11 +737,15 @@ export default function App() {
           <a href="#video">Видео</a>
           <a href="#formats">Тарифтер</a>
         </nav>
-        <div className="socials">
-          <a href="#top">TG</a>
-          <a href="#top">VK</a>
-          <a href="#top">YT</a>
-          <a href="#top">IG</a>
+        <div className="socials" aria-label="Социалдык байланыштар">
+          <a className="social-link instagram" href={instagramUrl} target="_blank" rel="noreferrer">
+            <Camera size={15} />
+            Instagram
+          </a>
+          <a className="social-link whatsapp" href={whatsappUrl} target="_blank" rel="noreferrer">
+            <MessageCircle size={15} />
+            WhatsApp
+          </a>
         </div>
       </footer>
     </main>
@@ -700,7 +778,15 @@ function CourseCard({ compact = false }: { compact?: boolean }) {
         <span>Курс визуал · 01/06</span>
         <i />
       </header>
+      <div className="course-photo">
+        <img src={authorHeroImage} alt="Уулболсун Алмазбек" />
+      </div>
       <strong>продюсер</strong>
+      <div className="course-radar" aria-hidden="true">
+        <span />
+        <span />
+        <span />
+      </div>
       <div className="course-matrix" aria-hidden="true">
         <span className="matrix-core">0дон</span>
         <span>контент</span>
@@ -709,9 +795,19 @@ function CourseCard({ compact = false }: { compact?: boolean }) {
         <span>бронь</span>
         <span>сатуу</span>
       </div>
+      <div className="course-proof course-proof-left">
+        <MotionIcon icon={BadgeCheck} tone="signal" compact />
+        <b>3,5 жыл</b>
+        <span>тажрыйба</span>
+      </div>
+      <div className="course-proof course-proof-right">
+        <MotionIcon icon={BarChart3} tone="sun" compact />
+        <b>25 млн</b>
+        <span>сатуу</span>
+      </div>
       <footer>
         <div>
-          <span>Курс</span>
+          <span>онлайн курс</span>
           <b>28.04 / 2026</b>
         </div>
         <a className="course-play" href="#video" aria-label="Видео бөлүмүнө өтүү">
@@ -723,6 +819,33 @@ function CourseCard({ compact = false }: { compact?: boolean }) {
         практика · запуск · сатуу
       </div>
     </article>
+  );
+}
+
+function MotionIcon({
+  icon: Icon,
+  tone = "accent",
+  compact = false,
+}: {
+  icon: LucideIcon;
+  tone?: MotionTone;
+  compact?: boolean;
+}) {
+  return (
+    <span className={`motion-icon ${tone}${compact ? " compact" : ""}`} aria-hidden="true">
+      <Icon size={compact ? 16 : 20} strokeWidth={2.4} />
+      <i />
+      <b />
+    </span>
+  );
+}
+
+function HookLine({ children, icon }: { children: string; icon: LucideIcon }) {
+  return (
+    <p className="section-hook">
+      <MotionIcon icon={icon} tone="accent" compact />
+      <span>{children}</span>
+    </p>
   );
 }
 
